@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Nexus Launcher</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Setup Wizard (First Time) -->
+    <div id="setup-wizard" class="setup-wizard" style="display:none;">
+        <div class="setup-container">
+            <div class="setup-header">
+                <img src="https://assets.stickpng.com/images/580b57fcd9996e24bc43c2f1.png" alt="Nexus Launcher"
+                    class="setup-logo">
+                <h1>Nexus Launcher'a Hoş Geldiniz!</h1>
+                <p>Minecraft deneyiminiz için her şeyi hazırlıyoruz</p>
+            </div>
+
+            <!-- Step 1: Welcome -->
+            <div id="setup-step-1" class="setup-step active">
+                <div class="setup-step-content">
+                    <i class="fas fa-rocket" style="font-size: 4rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h2>Başlayalım!</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.8;">Modern, güçlü ve kullanımı kolay Minecraft launcher'ınız
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check-circle"></i> Otomatik Java kurulumu</li>
+                        <li><i class="fas fa-check-circle"></i> Mod yükleyici desteği (Forge, Fabric, NeoForge)</li>
+                        <li><i class="fas fa-check-circle"></i> Modrinth entegrasyonu</li>
+                        <li><i class="fas fa-check-circle"></i> Microsoft hesap desteği</li>
+                    </ul>
+                </div>
+                <button class="setup-next-btn" onclick="setupNextStep()">Devam Et <i
+                        class="fas fa-arrow-right"></i></button>
+            </div>
+
+            <!-- Step 2: Language Selection -->
+            <div id="setup-step-2" class="setup-step">
+                <div class="setup-step-content">
+                    <i class="fas fa-language" style="font-size: 4rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h2>Dil Seçimi</h2>
+                    <p>Lütfen tercih ettiğiniz dili seçin</p>
+                    <select id="setup-language-select" class="setup-select">
+                        <option value="tr">🇹🇷 Türkçe</option>
+                        <option value="en">🇬🇧 English</option>
+                        <option value="es">🇪🇸 Español</option>
+                        <option value="de">🇩🇪 Deutsch</option>
+                        <option value="fr">🇫🇷 Français</option>
+                        <option value="ru">🇷🇺 Русский</option>
+                    </select>
+                </div>
+                <div class="setup-buttons">
+                    <button class="setup-back-btn" onclick="setupPrevStep()"><i class="fas fa-arrow-left"></i>
+                        Geri</button>
+                    <button class="setup-next-btn" onclick="setupNextStep()">Devam Et <i
+                            class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Step 3: Java Setup -->
+            <div id="setup-step-3" class="setup-step">
+                <div class="setup-step-content">
+                    <div id="java-animation-container" style="margin-bottom: 20px;">
+                        <i class="fas fa-search" id="java-main-icon"
+                            style="font-size: 4.5rem; color: var(--primary); transition: all 0.5s ease;"></i>
+                    </div>
+                    <h2>Java Hazırlığı</h2>
+                    <p id="setup-java-status" style="font-weight: bold; margin-bottom: 10px;">Analiz ediliyor...</p>
+
+                    <!-- Progress Area (Always Visible for Feedback) -->
+                    <div id="setup-java-progress"
+                        style="display:block; width: 100%; max-width: 400px; margin: 20px auto;">
+                        <div
+                            style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; opacity: 0.8;">
+                            <span id="setup-java-step-name">Sistem Taraması</span>
+                            <span id="setup-java-progress-text">0%</span>
+                        </div>
+                        <div class="progress-bar-bg"
+                            style="height: 12px; border-radius: 6px; background: rgba(255,255,255,0.05);">
+                            <div id="setup-java-bar" class="progress-bar-fill"
+                                style="width: 2%; box-shadow: 0 0 10px var(--primary);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Small Log Window -->
+                    <div
+                        style="background: rgba(0,0,0,0.25); border-radius: 8px; padding: 10px; width: 100%; max-width: 400px; font-family: monospace; font-size: 11px; text-align: left; border: 1px solid rgba(255,255,255,0.03); margin-top: 10px; color: #aaa;">
+                        <div id="java-log-line"># Hazırlık aşaması başlatıldı...</div>
+                    </div>
+                </div>
+                <div class="setup-buttons">
+                    <button class="setup-back-btn" onclick="setupPrevStep()"><i class="fas fa-arrow-left"></i>
+                        Geri</button>
+                    <button id="setup-java-next-btn" class="setup-next-btn" onclick="setupNextStep()" disabled>Devam Et
+                        <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- Step 4: Finish -->
+            <div id="setup-step-4" class="setup-step">
+                <div class="setup-step-content">
+                    <i class="fas fa-check-circle" style="font-size: 4rem; color: #4caf50; margin-bottom: 20px;"></i>
+                    <h2>Kurulum Tamamlandı!</h2>
+                    <p>Nexus Launcher kullanıma hazır.</p>
+                    <p style="opacity: 0.7; margin-top: 10px;">Giriş yaparak Minecraft'ı başlatabilirsiniz.</p>
+                </div>
+                <button class="setup-next-btn" onclick="finishSetup()">Başlayalım! <i
+                        class="fas fa-rocket"></i></button>
+            </div>
+
+            <!-- Step Indicators -->
+            <div class="setup-steps-indicator">
+                <div class="step-dot active" data-step="1"></div>
+                <div class="step-dot" data-step="2"></div>
+                <div class="step-dot" data-step="3"></div>
+                <div class="step-dot" data-step="4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Screen Overlay -->
+    <div id="login-overlay" class="login-overlay">
+        <div class="login-box">
+            <h1 class="login-brand-text">NEXUS LAUNCHER</h1>
+            <img src="./assets/nexus-logo.png" alt="Logo" class="login-logo"
+                style="width: 140px; border-radius: 25px; box-shadow: 0 0 40px rgba(156, 39, 176, 0.4); border: 2px solid rgba(156, 39, 176, 0.3);">
+            <h2 id="login-title">Tekrar Hoş Geldin</h2>
+            <div class="login-grid">
+                <div class="login-form">
+                    <!-- View 1: Mode Selection -->
+                    <div id="login-view-mode">
+                        <button id="btn-mode-microsoft" class="launch-btn-big"
+                            style="width: 100%; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <i class="fab fa-microsoft"></i> Microsoft ile Giriş
+                        </button>
+                        <button id="btn-mode-offline" class="secondary-btn" style="width: 100%;">
+                            <i class="fas fa-user-secret"></i> Offline Giriş
+                        </button>
+                    </div>
+
+                    <!-- View 2: Offline Form -->
+                    <div id="login-view-offline" style="display: none;">
+                        <div class="input-group">
+                            <label id="login-username-label">Kullanıcı Adı</label>
+                            <input type="text" id="login-username" placeholder="Kullanıcı Adı Girin">
+                        </div>
+                        <button id="btn-login-offline-action" class="launch-btn-big"
+                            style="width: 100%; margin-top: 10px;">
+                            GİRİŞ YAP
+                        </button>
+                        <button id="btn-back-mode" class="secondary-btn"
+                            style="width: 100%; margin-top: 10px; background: transparent; border: 1px solid #444;">
+                            Geri Dön
+                        </button>
+                    </div>
+
+                    <div id="login-status" style="margin-top: 10px; color: #ff5252; font-size: 0.9rem;"></div>
+                </div>
+                <div class="login-side">
+                    <label id="login-profiles-label">Kayıtlı Kullanıcılar</label>
+                    <div id="login-profiles-list" class="mods-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="titlebar">
+        <div class="titlebar-drag">Nexus Launcher</div>
+        <div class="titlebar-actions">
+            <button id="tb-min" class="tb-btn"><i class="fas fa-minus"></i></button>
+            <button id="tb-max" class="tb-btn"><i class="fas fa-window-maximize"></i></button>
+            <button id="tb-close" class="tb-btn"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+
+    <div class="app-container" id="app-container">
+        <!-- Left Sidebar Navigation -->
+        <div class="side-nav">
+            <div class="nav-brand">
+                <img src="./assets/nexus-logo.png" alt="Logo" style="width: 38px; height: 38px; border-radius: 8px;">
+                <span class="brand-text-lite"
+                    style="background: linear-gradient(135deg, #fff 30%, #9c27b0 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; letter-spacing: 1px;">NEXUS</span>
+            </div>
+
+            <div class="user-profile-badge" id="profile-header">
+                <img src="https://minotar.net/avatar/Steve/32.png" id="mini-head">
+                <div class="user-info-mini">
+                    <span id="mini-username">Steve</span>
+                    <span id="auth-status" class="status-indicator">Offline</span>
+                </div>
+            </div>
+
+            <div class="nav-links">
+                <div class="nav-item active" data-tab="play">
+                    <i class="fas fa-play"></i> <span id="nav-play">Oyna</span>
+                </div>
+                <div class="nav-item" data-tab="mods">
+                    <i class="fas fa-cubes"></i> <span id="nav-mods">Paketler</span>
+                </div>
+                <div class="nav-item" data-tab="skins">
+                    <i class="fas fa-tshirt"></i> <span id="nav-skins">Skinler</span>
+                </div>
+                <div class="nav-item" data-tab="settings">
+                    <i class="fas fa-cog"></i> <span id="settings-nav-label">Ayarlar</span>
+                </div>
+            </div>
+
+            <!-- Footer Links moved here -->
+            <div class="side-footer">
+                <a href="https://discord.gg/xyvkaDGtTb" target="_blank"><i class="fab fa-discord"></i></a>
+                <a href="https://github.com/Tahapro4316/LauncherPlus" target="_blank"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+
+            <!-- Play Tab -->
+            <div id="tab-play" class="tab-content active">
+                <div class="play-container">
+                    <div class="hero-center">
+                        <img src="./assets/nexus-logo.png" alt="Nexus" class="mc-logo"
+                            style="width: 180px; filter: drop-shadow(0 0 30px rgba(156, 39, 176, 0.5)); animation: float 6s ease-in-out infinite;">
+                        <h1 id="welcome-text"
+                            style="font-weight: 900; letter-spacing: -2px; margin-top: 15px; background: linear-gradient(to bottom, #fff, #bbb); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                            NEXUS DÜNYASI SİZİ BEKLİYOR</h1>
+                        <p style="opacity: 0.6; font-size: 1.1rem; font-weight: 500; margin-top: -10px;">Macera dolu bir
+                            yolculuğa çıkmaya hazır mısın?</p>
+                    </div>
+
+                    <!-- Bottom Launch Bar -->
+                    <div class="launch-bar">
+                        <div class="selector-wrapper">
+                            <div class="version-selector-group">
+                                <label>Sürüm / Profil</label>
+                                <select id="version-select"></select>
+                                <div class="filters">
+                                    <label><input type="checkbox" id="show-snapshots"> Snapshots</label>
+                                    <label><input type="checkbox" id="show-betas"> Betas</label>
+                                </div>
+                            </div>
+
+                            <div class="mod-selector-group">
+                                <label>Mod Yükleyici</label>
+                                <select id="mod-loader">
+                                    <option value="vanilla">Vanilla</option>
+                                    <option value="forge">Forge</option>
+                                    <option value="fabric">Fabric</option>
+                                    <option value="quilt">Quilt</option>
+                                    <option value="neoforge">NeoForge</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="launch-action">
+                            <button id="launch-btn" class="launch-btn-big">
+                                <span class="btn-text">OYNA</span>
+                                <span class="btn-subtext" id="launch-subtext">Hazırlanıyor...</span>
+                            </button>
+                            <!-- Progress Info Overlay (Slim) -->
+                            <div id="progress-area" class="progress-area-slim" style="display: none;">
+                                <div class="progress-info">
+                                    <span id="progress-status">Başlatılıyor...</span>
+                                    <span id="progress-percent">0%</span>
+                                </div>
+                                <div class="progress-bar-bg">
+                                    <div id="progress-bar" class="progress-bar-fill"></div>
+                                </div>
+                                <button id="cancel-launch-btn" class="cancel-btn-tiny">İptal</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Skins Tab (Coming Soon) -->
+            <div id="tab-skins" class="tab-content">
+                <div class="coming-soon-container">
+                    <i class="fas fa-paint-brush coming-soon-icon"></i>
+                    <h2>Skin Sistemi</h2>
+                    <p>Çok yakında burada olacak! Harika şeyler yolda.</p>
+                    <span class="coming-soon-badge">YAPIM AŞAMASINDA</span>
+                </div>
+            </div>
+
+            <!-- Mods Tab -->
+            <div id="tab-mods" class="tab-content">
+                <h2>Mods & Paketler</h2>
+
+                <!-- Top Bar with Search & Buttons -->
+                <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="flex: 1; min-width: 250px; display: flex; gap: 10px;">
+                        <input type="text" id="modrinth-query" placeholder="Modrinth'te ara..."
+                            style="flex: 1; padding: 12px 16px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 10px; color: white; font-size: 0.95rem;">
+                        <button id="modrinth-search-btn" class="secondary-btn" style="width: 120px;"><i
+                                class="fas fa-search"></i> ARA</button>
+                        <button id="modrinth-browse-btn" class="secondary-btn" style="width: 120px;"><i
+                                class="fas fa-compass"></i> KEŞFET</button>
+                    </div>
+
+                    <!-- Type Selector -->
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 0.8rem; color: var(--text-muted);">Türü</label>
+                        <select id="modrinth-type"
+                            style="padding: 10px 12px; background: #000; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; cursor: pointer; min-width: 140px;">
+                            <option value="modpack">📦 Modpack</option>
+                            <option value="mod">🔧 Tekil Mod</option>
+                            <option value="resourcepack">🎨 Resource Pack</option>
+                            <option value="shader">✨ Shader</option>
+                        </select>
+                    </div>
+
+                    <!-- Loader Selector -->
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 0.8rem; color: var(--text-muted);">Loader</label>
+                        <select id="modrinth-loader"
+                            style="padding: 10px 12px; background: #000; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; cursor: pointer; min-width: 140px;">
+                            <option value="">Tümü</option>
+                            <option value="fabric">🧵 Fabric</option>
+                            <option value="forge">⚙️ Forge</option>
+                            <option value="neoforge">🌟 NeoForge</option>
+                            <option value="quilt">📦 Quilt</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort Selector -->
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-size: 0.8rem; color: var(--text-muted);">Sıralama</label>
+                        <select id="mods-sort"
+                            style="padding: 10px 12px; background: #000; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: white; cursor: pointer; min-width: 140px;">
+                            <option value="relevance">Alakalılık</option>
+                            <option value="downloads">İndirmeler</option>
+                            <option value="newest">En Yeni</option>
+                            <option value="updated">Güncellenen</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Mods Grid -->
+                <div id="modrinth-results" class="mods-grid-modern">
+                    <!-- Modlar buraya yerleştirilecek -->
+                </div>
+
+            </div>
+
+            <!-- Settings Tab (With internal tabs) -->
+            <div id="tab-settings" class="tab-content settings-layout">
+                <div class="settings-sidebar">
+                    <div class="settings-nav-item active" data-set-tab="general">
+                        <i class="fas fa-user-circle"></i> <span id="set-tab-general-text">Genel & Hesaplar</span>
+                    </div>
+                    <div class="settings-nav-item" data-set-tab="appearance">
+                        <i class="fas fa-paint-brush"></i> <span id="set-tab-appearance-text">Görünüm & Tasarım</span>
+                    </div>
+                    <div class="settings-nav-item" data-set-tab="java">
+                        <i class="fas fa-microchip"></i> <span id="set-tab-java-text">Java & RAM</span>
+                    </div>
+                    <div class="settings-nav-item" data-set-tab="game">
+                        <i class="fas fa-folder-open"></i> <span id="set-tab-game-text">Dosyalar & Konum</span>
+                    </div>
+                    <div class="settings-nav-item" data-set-tab="updates">
+                        <i class="fas fa-history"></i> <span id="set-tab-updates-text">Güncellemeler</span>
+                    </div>
+                    <div class="settings-nav-item" data-set-tab="console">
+                        <i class="fas fa-terminal"></i> <span id="set-tab-console-text">Konsol / Log</span>
+                    </div>
+                </div>
+
+                <div class="settings-content-area">
+                    <!-- General Settings -->
+                    <div id="set-tab-general" class="setting-section active">
+                        <h3>Hesap Yönetimi</h3>
+                        <div class="setting-card">
+                            <div class="input-group">
+                                <label>Mevcut Hesaplar</label>
+                                <div id="profiles-list" class="mods-list" style="max-height: 150px;"></div>
+                            </div>
+                            <div class="button-row">
+                                <button id="add-offline-account-btn" class="secondary-btn">Offline Hesap Ekle</button>
+                                <button id="add-microsoft-account-btn" class="secondary-btn">Microsoft Hesap
+                                    Ekle</button>
+                            </div>
+                        </div>
+                        <h3>Diller</h3>
+                        <div class="setting-card">
+                            <div class="input-group">
+                                <label>Uygulama Dili</label>
+                                <select id="settings-language">
+                                    <option value="tr">Türkçe</option>
+                                    <option value="en">English</option>
+                                    <option value="es">Español</option>
+                                    <option value="de">Deutsch</option>
+                                    <option value="fr">Français</option>
+                                    <option value="ru">Русский</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appearance Settings -->
+                    <div id="set-tab-appearance" class="setting-section">
+                        <h3>Özelleştirme</h3>
+                        <div class="setting-card">
+                            <div class="input-group">
+                                <label>Ana Renk (Primary Color)</label>
+                                <input type="color" id="accent-color-picker" value="#9c27b0"
+                                    style="width: 100%; height: 40px;">
+                            </div>
+                            <div class="input-group">
+                                <label>Arkaplan Stili</label>
+                                <select id="bg-style-select">
+                                    <option value="dark">Koyu (Standart)</option>
+                                    <option value="deep">Derin Siyah</option>
+                                    <option value="blue">Gece Mavisi</option>
+                                    <option value="custom">Özel Resim URL</option>
+                                </select>
+                            </div>
+                            <div id="custom-bg-group" class="input-group" style="display:none;">
+                                <label>Arkaplan Resim URL</label>
+                                <div class="path-input-group">
+                                    <input type="text" id="custom-bg-url" placeholder="https://example.com/bg.png">
+                                    <button id="apply-bg-btn" class="secondary-btn">Uygula</button>
+                                </div>
+                            </div>
+                        </div>
+                        <h3>Arayüz Ayarları</h3>
+                        <div class="setting-card">
+                            <div class="mods-item">
+                                <span>Gelişmiş Animasyonlar</span>
+                                <label class="switch"><input type="checkbox" id="ui-animations" checked><span
+                                        class="slider"></span></label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Java & Optimization -->
+                    <div id="set-tab-java" class="setting-section">
+                        <h3>Java Yapılandırması</h3>
+                        <div class="setting-card">
+                            <div class="input-group">
+                                <label>Java Yolu (Executable)</label>
+                                <div class="path-input-group">
+                                    <input type="text" id="java-path" placeholder="Otomatik (boş bırakın)">
+                                    <button id="browse-java-btn" class="secondary-btn">Gözat</button>
+                                    <button id="install-java-btn" class="secondary-btn"
+                                        style="background: #4caf50; border-color: #4caf50;">
+                                        <i class="fas fa-download"></i> Java Kur
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>RAM Miktarı: <span id="ram-display">2048 MB</span></label>
+                                <input type="range" id="ram-slider" min="1024" max="16384" step="512" value="2048">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Game Files -->
+                    <div id="set-tab-game" class="setting-section">
+                        <h3>Dosya Konumları</h3>
+                        <div class="setting-card">
+                            <div class="input-group">
+                                <label>Oyun Klasörü</label>
+                                <input type="text" id="game-dir" value="Default" disabled>
+                            </div>
+                            <div class="path-input-group" style="margin-top: 10px; flex-wrap: wrap;">
+                                <button id="open-game-dir-btn" class="secondary-btn">Oyun Klasörünü Aç</button>
+                                <button id="open-mods-dir-btn" class="secondary-btn">Mods</button>
+                                <button id="open-config-dir-btn" class="secondary-btn">Config</button>
+                                <button id="copy-config-btn" class="secondary-btn">Dışardan Config Yükle</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Updates -->
+                    <div id="set-tab-updates" class="setting-section">
+                        <h3>Yazılım Güncellemeleri</h3>
+                        <div class="setting-card">
+                            <div class="update-status-card">
+                                <i class="fas fa-sync" style="font-size: 2rem; color: var(--primary);"></i>
+                                <div>
+                                    <div style="font-weight:bold; font-size:1.1rem;">Nexus Launcher v1.0.1</div>
+                                    <div id="update-status-text" style="color:#888;">Güncellemeler denetleniyor...</div>
+                                </div>
+                                <button id="check-updates-btn" class="secondary-btn">Denetle</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Console (Moved here) -->
+                    <div id="set-tab-console" class="setting-section">
+                        <div class="console-header">
+                            <h3>Oyun Konsolu</h3>
+                            <div>
+                                <button id="filter-all" class="action-btn">Tümü</button>
+                                <button id="filter-error" class="action-btn" style="color:#ff5252;">Hatalar</button>
+                                <button id="clear-console" class="action-btn">Temizle</button>
+                            </div>
+                        </div>
+                        <div id="console-output" class="console-output" style="height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://unpkg.com/skinview3d@3.0.0-alpha.1/bundles/skinview3d.bundle.js"></script>
+        <script src="renderer.js"></script>
+        <div id="toast-container" class="toast-container"></div>
+</body>
+
+</html>

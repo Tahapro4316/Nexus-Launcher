@@ -1,0 +1,60 @@
+{
+  "name": "nexus-launcher",
+  "version": "1.0.0",
+  "description": "A modern, feature-rich Minecraft Launcher",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder",
+    "release": "electron-builder --publish always"
+  },
+  "keywords": [
+    "minecraft",
+    "launcher",
+    "electron"
+  ],
+  "author": "Nexus Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tahapro4316/LauncherPlus.git"
+  },
+  "build": {
+    "appId": "com.nexus.launcher",
+    "productName": "Nexus Launcher",
+    "win": {
+      "target": "nsis",
+      "signAndEditExecutable": false,
+      "forceCodeSigning": false,
+      "verifyUpdateCodeSignature": false,
+      "artifactName": "${productName} Setup ${version}.${ext}",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Tahapro4316",
+        "repo": "LauncherPlus"
+      }
+    ]
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "axios": "^1.13.2",
+    "electron-updater": "^6.2.1",
+    "minecraft-launcher-core": "^3.13.0",
+    "msmc": "^5.0.5",
+    "skinview3d": "^3.4.1"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  }
+}
