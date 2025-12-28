@@ -1,6 +1,21 @@
-# 🚀 Nexus Launcher
+<p align="center">
+  <img src="assets/banner.png" alt="Nexus Launcher Banner" width="100%">
+</p>
 
-Modern, özellik açısından zengin bir Minecraft Launcher. Java otomatik kurulum, mod yükleyiciler, modpack yönetimi ve daha fazlası!
+# <p align="center">🚀 Nexus Launcher</p>
+
+<p align="center">
+  Modern, özellik açısından zengin bir Minecraft Launcher. Java otomatik kurulum, mod yükleyiciler, modpack yönetimi ve daha fazlası!
+</p>
+
+<p align="center">
+  <a href="https://github.com/Tahapro4316/Nexus-Launcher/releases">
+    <img src="https://img.shields.io/github/v/release/Tahapro4316/Nexus-Launcher?style=for-the-badge&color=8A2BE2" alt="Release">
+  </a>
+  <a href="https://github.com/Tahapro4316/Nexus-Launcher/stargazers">
+    <img src="https://img.shields.io/github/stars/Tahapro4316/Nexus-Launcher?style=for-the-badge&color=ffd700" alt="Stars">
+  </a>
+</p>
 
 ## ✨ Özellikler
 

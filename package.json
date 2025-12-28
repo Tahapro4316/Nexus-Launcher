@@ -13,11 +13,11 @@
     "launcher",
     "electron"
   ],
-  "author": "Nexus Team",
+  "author": "Tahapro4316",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Tahapro4316/LauncherPlus.git"
+    "url": "https://github.com/Tahapro4316/Nexus-Launcher.git"
   },
   "build": {
     "appId": "com.nexus.launcher",
@@ -41,7 +41,7 @@
       {
         "provider": "github",
         "owner": "Tahapro4316",
-        "repo": "LauncherPlus"
+        "repo": "Nexus-Launcher"
       }
     ]
   },
