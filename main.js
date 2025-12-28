@@ -179,8 +179,20 @@ ipcMain.handle('open-folder', async (event, params) => {
 ipcMain.handle('login-microsoft', async () => {
     try {
         const authManager = new msmc.Auth("select_account");
+        authManager.on("status", (info) => {
+            console.log("[MSMC Status]", info);
+            safeSend('console-log', { type: 'info', msg: `[Login] Microsoft: ${info}` });
+        });
+
         const xboxManager = await authManager.launch("electron");
         const token = await xboxManager.getMinecraft();
+
+        if (!token || !token.profile) {
+            console.error("Login result missing profile data:", token);
+            throw new Error("Microsoft hesabı doğrulandı ancak Minecraft profili bulunamadı (Oyun satın alınmamış olabilir).");
+        }
+
+        console.log("[Login] Success:", token.profile.name);
         return {
             success: true,
             username: token.profile.name,
@@ -188,8 +200,22 @@ ipcMain.handle('login-microsoft', async () => {
             token: token.mcToken
         };
     } catch (e) {
-        console.error("Microsoft Login Failed", e);
-        return { success: false, error: e.message };
+        console.error("Microsoft Login Failed Detail:", e);
+
+        let displayError = e?.message || "Bilinmeyen bir hata oluştu.";
+
+        // Handle msmc specific error objects
+        if (e && e.ts === 'error.auth.minecraft.profile' || e?.response?.status === 404) {
+            displayError = "Minecraft profili bulunamadı! Lütfen bu Microsoft hesabında Minecraft: Java Edition satın alındığından emin olun.";
+        } else if (typeof displayError === 'string') {
+            if (displayError.toLowerCase().includes("undefined")) {
+                displayError = "Giriş işlemi iptal edildi veya veri alınamadı.";
+            } else if (displayError.toLowerCase().includes("abort") || displayError.toLowerCase().includes("cancel")) {
+                displayError = "Giriş işlemi iptal edildi.";
+            }
+        }
+
+        return { success: false, error: displayError };
     }
 });
 
